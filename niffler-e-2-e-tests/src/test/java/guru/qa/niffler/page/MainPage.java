@@ -40,4 +40,5 @@ public class MainPage {
   public ProfilePage navigateToProfilePage() {
     return ProfilePage.open();
   }
+
 }
