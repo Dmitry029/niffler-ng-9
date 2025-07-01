@@ -117,5 +117,4 @@ public class UsersQueueExtension implements
         Map<UserType, StaticUser> map = extensionContext.getStore(NAMESPACE).get(extensionContext.getUniqueId(), Map.class);
         return map.get(parameterContext.getParameter().getAnnotation(UserType.class));
     }
-
 }
