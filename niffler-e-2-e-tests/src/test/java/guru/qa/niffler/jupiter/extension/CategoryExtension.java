@@ -3,7 +3,7 @@ package guru.qa.niffler.jupiter.extension;
 import guru.qa.niffler.api.SpendApiClient;
 import guru.qa.niffler.jupiter.annotation.Category;
 import guru.qa.niffler.model.CategoryJson;
-import guru.qa.niffler.utils.StringUtils;
+import guru.qa.niffler.utils.RandomDataUtils;
 import org.junit.jupiter.api.extension.*;
 import org.junit.platform.commons.support.AnnotationSupport;
 
@@ -19,7 +19,7 @@ public class CategoryExtension implements BeforeEachCallback, ParameterResolver,
                 .ifPresent(anno -> {
                     CategoryJson categoryJson = new CategoryJson(
                             null,
-                            StringUtils.getRandomName(),
+                            RandomDataUtils.randomCategoryName(),
                             anno.username(),
                             false
                     );
