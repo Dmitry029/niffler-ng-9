@@ -1,9 +1,9 @@
 package guru.qa.niffler.test;
 
 import com.codeborne.selenide.Selenide;
-import com.github.javafaker.Faker;
 import guru.qa.niffler.config.Config;
 import guru.qa.niffler.page.RegisterPage;
+import guru.qa.niffler.utils.RandomDataUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,7 +12,7 @@ import java.util.Random;
 
 public class RegistrationTest {
 
-    private final String username = new Faker().name().username();
+    private final String username = RandomDataUtils.randomUserName();
     private final String password = String.valueOf(10000 + new Random().nextInt(90000));
     private final String ExistUserName = "testUser2";
 
