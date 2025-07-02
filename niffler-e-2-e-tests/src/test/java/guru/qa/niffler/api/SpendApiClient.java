@@ -9,6 +9,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -18,17 +19,18 @@ public class SpendApiClient {
   private static final Config CFG = Config.getInstance();
 
   private static final Retrofit retrofit = new Retrofit.Builder()
-          .baseUrl(CFG.spendUrl())
-          .addConverterFactory(JacksonConverterFactory.create())
-          .build();
+      .baseUrl(CFG.spendUrl())
+      .addConverterFactory(JacksonConverterFactory.create())
+      .build();
 
   private final SpendApi spendApi = retrofit.create(SpendApi.class);
 
-  public SpendJson addSpend(SpendJson spendJson) {
+  public SpendJson addSpend(SpendJson spend) {
     final Response<SpendJson> response;
     try {
-      response = spendApi.addSpend(spendJson).execute();
-    } catch (Exception e) {
+      response = spendApi.addSpend(spend)
+          .execute();
+    } catch (IOException e) {
       throw new AssertionError(e);
     }
     assertEquals(201, response.code());
@@ -38,7 +40,8 @@ public class SpendApiClient {
   public SpendJson editSpend(SpendJson spend) {
     final Response<SpendJson> response;
     try {
-      response = spendApi.editSpend(spend).execute();
+      response = spendApi.editSpend(spend)
+          .execute();
     } catch (IOException e) {
       throw new AssertionError(e);
     }
@@ -46,10 +49,11 @@ public class SpendApiClient {
     return response.body();
   }
 
-  public SpendJson getSpend(String id, String username) {
+  public SpendJson getSpend(String id) {
     final Response<SpendJson> response;
     try {
-      response = spendApi.getSpend(id, username).execute();
+      response = spendApi.getSpend(id)
+          .execute();
     } catch (IOException e) {
       throw new AssertionError(e);
     }
@@ -57,11 +61,14 @@ public class SpendApiClient {
     return response.body();
   }
 
-  public List<SpendJson> getAllSpend(String username, CurrencyValues currencyValues, String from, String to) {
+  public List<SpendJson> allSpends(String username,
+                                   CurrencyValues currency,
+                                   String from,
+                                   String to) {
     final Response<List<SpendJson>> response;
     try {
-      response = spendApi.getAllSpend(username, currencyValues, from, to)
-              .execute();
+      response = spendApi.allSpends(username, currency, from, to)
+          .execute();
     } catch (IOException e) {
       throw new AssertionError(e);
     }
@@ -69,11 +76,11 @@ public class SpendApiClient {
     return response.body();
   }
 
-  public void deleteSpend(String username, List<String> ids) {
+  public void removeSpends(String username, String... ids) {
     final Response<Void> response;
     try {
-      response = spendApi.removeSpends(username, ids)
-              .execute();
+      response = spendApi.removeSpends(username, Arrays.stream(ids).toList())
+          .execute();
     } catch (IOException e) {
       throw new AssertionError(e);
     }
@@ -84,7 +91,7 @@ public class SpendApiClient {
     final Response<CategoryJson> response;
     try {
       response = spendApi.addCategory(category)
-              .execute();
+          .execute();
     } catch (IOException e) {
       throw new AssertionError(e);
     }
@@ -96,7 +103,7 @@ public class SpendApiClient {
     final Response<CategoryJson> response;
     try {
       response = spendApi.updateCategory(category)
-              .execute();
+          .execute();
     } catch (IOException e) {
       throw new AssertionError(e);
     }
@@ -104,11 +111,11 @@ public class SpendApiClient {
     return response.body();
   }
 
-  public List<CategoryJson> getAllCategories(String username, boolean excludeArchived ) {
+  public List<CategoryJson> allCategory(String username) {
     final Response<List<CategoryJson>> response;
     try {
-      response = spendApi.getAllCategories(username, excludeArchived)
-              .execute();
+      response = spendApi.allCategories(username)
+          .execute();
     } catch (IOException e) {
       throw new AssertionError(e);
     }
