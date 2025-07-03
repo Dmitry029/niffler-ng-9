@@ -33,7 +33,7 @@ public class FriendsTest {
         .successLogin(user.username(), user.password())
         .checkThatPageLoaded()
         .friendsPage()
-        .checkNoExistingFriends();
+        .checkThatFriendsDoNotExist();
   }
 
   @Test
@@ -42,7 +42,7 @@ public class FriendsTest {
         .successLogin(user.username(), user.password())
         .checkThatPageLoaded()
         .friendsPage()
-        .checkExistingInvitations(user.income());
+            .checkExistingFriends(user.income());
   }
 
   @Test
