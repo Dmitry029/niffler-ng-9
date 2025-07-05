@@ -34,7 +34,7 @@ public class CategoryExtension implements
                         );
 
                         CategoryJson created = spendDbClient.createCategory(categoryJson);
-                        context.getStore(NAMESPACE).put(context.getUniqueId(),created);
+                        context.getStore(NAMESPACE).put(context.getUniqueId(), created);
                     }
                 });
     }
@@ -42,10 +42,9 @@ public class CategoryExtension implements
     @Override
     public void afterTestExecution(ExtensionContext context) throws Exception {
         CategoryJson categoryJson = createCategory();
-        if (categoryJson != null && !categoryJson.archived()) {
-            spendDbClient.deleteCategory(categoryJson);
-        }
+        spendDbClient.deleteCategory(categoryJson);
     }
+
 
     @Override
     public boolean supportsParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws
