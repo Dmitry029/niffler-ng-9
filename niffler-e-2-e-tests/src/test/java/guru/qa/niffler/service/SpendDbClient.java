@@ -45,7 +45,7 @@ public class SpendDbClient {
                     CategoryEntity categoryEntity = CategoryEntity.fromJson(categoryJson);
                     new CategoryDaoJdbc(connection).deleteCategory(categoryEntity);
                 },
-                CFG.spendJdbcUrl(),2
+                CFG.spendJdbcUrl(), 2
         );
     }
 }
