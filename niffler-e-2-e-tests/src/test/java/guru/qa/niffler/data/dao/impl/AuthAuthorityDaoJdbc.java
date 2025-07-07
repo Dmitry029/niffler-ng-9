@@ -11,18 +11,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class AuthAuthorityJdbc implements AuthAuthorityDao {
+public class AuthAuthorityDaoJdbc implements AuthAuthorityDao {
 
     private static final Config CFG = Config.getInstance();
 
     private final Connection connection;
 
-    public AuthAuthorityJdbc(Connection connection) {
+    public AuthAuthorityDaoJdbc(Connection connection) {
         this.connection = connection;
     }
 
     @Override
-    public void createUser(AuthAuthorityEntity... authAuthorityEntity) {
+    public void createAuthority(AuthAuthorityEntity... authAuthorityEntity) {
         try (
                 PreparedStatement ps = connection.prepareStatement(
                         "INSERT INTO authority (user_id, authority) " +

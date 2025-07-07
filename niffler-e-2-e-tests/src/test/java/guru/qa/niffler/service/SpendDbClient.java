@@ -12,31 +12,40 @@ import static guru.qa.niffler.data.Databases.transaction;
 
 public class SpendDbClient {
 
-  private static final Config CFG = Config.getInstance();
+    private static final Config CFG = Config.getInstance();
 
-  public SpendJson createSpend(SpendJson spend) {
-    return transaction(connection -> {
-          SpendEntity spendEntity = SpendEntity.fromJson(spend);
-          if (spendEntity.getCategory().getId() == null) {
-            CategoryEntity categoryEntity = new CategoryDaoJdbc(connection)
-                .create(spendEntity.getCategory());
-            spendEntity.setCategory(categoryEntity);
-          }
-          return SpendJson.fromEntity(
-              new SpendDaoJdbc(connection).create(spendEntity)
-          );
-        },
-        CFG.spendJdbcUrl()
-    );
-  }
+    public SpendJson createSpend(SpendJson spend) {
+        return transaction(connection -> {
+                    SpendEntity spendEntity = SpendEntity.fromJson(spend);
+                    if (spendEntity.getCategory().getId() == null) {
+                        CategoryEntity categoryEntity = new CategoryDaoJdbc(connection)
+                                .create(spendEntity.getCategory());
+                        spendEntity.setCategory(categoryEntity);
+                    }
+                    return SpendJson.fromEntity(new SpendDaoJdbc(connection).create(spendEntity)
+                    );
+                },
+                CFG.spendJdbcUrl(), 2
+        );
+    }
 
-  public CategoryJson createCategory(CategoryJson categoryJson){
-    CategoryEntity categoryEntity = CategoryEntity.fromJson(categoryJson);
-    return CategoryJson.fromEntity(categoryDao.create(categoryEntity));
-  }
+    public CategoryJson createCategory(CategoryJson categoryJson) {
+        return transaction(
+                connection -> {
+                    CategoryEntity categoryEntity = CategoryEntity.fromJson(categoryJson);
+                    return CategoryJson.fromEntity(new CategoryDaoJdbc(connection).create(categoryEntity));
+                },
+                CFG.spendJdbcUrl(), 2
+        );
+    }
 
-  public void deleteCategory(CategoryJson categoryJson){
-    CategoryEntity categoryEntity = CategoryEntity.fromJson(categoryJson);
-    categoryDao.deleteCategory(categoryEntity);
-  }
+    public void deleteCategory(CategoryJson categoryJson) {
+        transaction(
+                connection -> {
+                    CategoryEntity categoryEntity = CategoryEntity.fromJson(categoryJson);
+                    new CategoryDaoJdbc(connection).deleteCategory(categoryEntity);
+                },
+                CFG.spendJdbcUrl(),2
+        );
+    }
 }
