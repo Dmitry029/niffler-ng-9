@@ -80,7 +80,6 @@ public class Databases {
         }
     }
 
-
     public static void transaction(Consumer<Connection> consumer, String jdbcUrl, int transactionIsolationLevel) {
         Connection connection = null;
         try {

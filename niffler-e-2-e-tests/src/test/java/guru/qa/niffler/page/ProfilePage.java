@@ -1,7 +1,9 @@
 package guru.qa.niffler.page;
 
 import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
+import guru.qa.niffler.config.Config;
 
 import static com.codeborne.selenide.Condition.attributeMatching;
 import static com.codeborne.selenide.Condition.disabled;
@@ -21,7 +23,8 @@ public class ProfilePage {
   private final SelenideElement archivedSwitcher = $(".MuiSwitch-input");
   private final ElementsCollection bubbles = $$(".MuiChip-filled.MuiChip-colorPrimary");
   private final ElementsCollection bubblesArchived = $$(".MuiChip-filled.MuiChip-colorDefault");
-
+  private final ElementsCollection categoryList = $$("[class*='MuiChip-labelMedium']");
+  private final SelenideElement showArchivedCheckbox = $("input[type='checkbox']");
 
   public ProfilePage setName(String name) {
     nameInput.clear();
@@ -72,6 +75,20 @@ public class ProfilePage {
 
   public ProfilePage submitProfile() {
     submitButton.click();
+    return this;
+  }
+
+  public static ProfilePage open(){
+    Config CFG = Config.getInstance();
+    return Selenide.open(CFG.profilePageUrl(), ProfilePage.class);
+  }
+
+  public void checkCategoryInCategoryList(String categoryName) {
+    categoryList.findBy(text(categoryName)).should(visible);
+  }
+
+  public ProfilePage showArchivedCategories() {
+    showArchivedCheckbox.click();
     return this;
   }
 }

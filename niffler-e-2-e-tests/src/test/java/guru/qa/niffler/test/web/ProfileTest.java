@@ -7,43 +7,41 @@ import guru.qa.niffler.jupiter.annotation.User;
 import guru.qa.niffler.jupiter.annotation.meta.WebTest;
 import guru.qa.niffler.model.CategoryJson;
 import guru.qa.niffler.page.LoginPage;
-import guru.qa.niffler.page.ProfilePage;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 @WebTest
 public class ProfileTest {
 
-  private static final Config CFG = Config.getInstance();
+  private final Config CFG = Config.getInstance();
 
   @User(
-      username = "duck",
-      categories = @Category(
-          archived = true
-      )
+          username = "testUser3",
+          categories = @Category(archived = true)
   )
-  @Test
-  void archivedCategoryShouldPresentInCategoriesList(CategoryJson category) {
-    Selenide.open(CFG.frontUrl(), LoginPage.class)
-        .successLogin("duck", "12345")
-        .checkThatPageLoaded();
 
-    Selenide.open(CFG.frontUrl() + "profile", ProfilePage.class)
-        .checkArchivedCategoryExists(category.name());
+  @DisplayName("Архивная категория должна присутствовать в списке категорий")
+  @Test
+  void archivedCategoryShouldPresentInCategoriesList(CategoryJson categoryJson) {
+    Selenide.open(CFG.frontUrl(), LoginPage.class)
+            .fillLoginPage("testUser3", "34567")
+            .checkThatPageLoaded()
+            .navigateToProfilePage()
+            .showArchivedCategories()
+            .checkCategoryInCategoryList(categoryJson.name());
   }
 
   @User(
-      username = "duck",
-      categories = @Category(
-          archived = false
-      )
+          username = "testUser3",
+          categories = @Category(archived = false)
   )
+  @DisplayName("Активная категория должна присутствовать в списке категорий")
   @Test
   void activeCategoryShouldPresentInCategoriesList(CategoryJson category) {
     Selenide.open(CFG.frontUrl(), LoginPage.class)
-        .successLogin("duck", "12345")
-        .checkThatPageLoaded();
-
-    Selenide.open(CFG.frontUrl() + "profile", ProfilePage.class)
-        .checkCategoryExists(category.name());
+            .fillLoginPage("testUser3", "34567")
+            .checkThatPageLoaded()
+            .navigateToProfilePage()
+            .checkCategoryInCategoryList(category.name());
   }
 }

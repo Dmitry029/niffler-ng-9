@@ -40,4 +40,8 @@ public class MainPage {
     spendingTable.should(visible).shouldHave(text("History of Spendings"));
     return this;
   }
+
+  public ProfilePage navigateToProfilePage() {
+    return ProfilePage.open();
+  }
 }

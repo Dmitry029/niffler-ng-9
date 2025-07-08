@@ -22,10 +22,11 @@ public class LoginPage {
     return new MainPage();
   }
 
-  public void fillLoginPage(String username, String password) {
+  public MainPage fillLoginPage(String username, String password) {
     usernameInput.setValue(username);
     passwordInput.setValue(password);
     submitButton.click();
+    return new MainPage();
   }
 
   public LoginPage checkError(String error) {
