@@ -128,6 +128,8 @@ public class CategoryDaoJdbc implements CategoryDao {
       }
   }
 
+  // for test
+
   @Override
   public void deleteCategory(CategoryEntity category) {
       try (PreparedStatement ps = connection.prepareStatement(
