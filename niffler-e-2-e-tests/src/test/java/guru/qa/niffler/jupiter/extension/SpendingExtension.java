@@ -5,6 +5,7 @@ import guru.qa.niffler.jupiter.annotation.Spending;
 import guru.qa.niffler.jupiter.annotation.User;
 import guru.qa.niffler.model.CategoryJson;
 import guru.qa.niffler.model.SpendJson;
+import guru.qa.niffler.service.SpendDbClient;
 import org.apache.commons.lang3.ArrayUtils;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -21,14 +22,14 @@ public class SpendingExtension implements BeforeEachCallback, ParameterResolver 
 
   public static final ExtensionContext.Namespace NAMESPACE = ExtensionContext.Namespace.create(SpendingExtension.class);
 
-  private final SpendApiClient spendApiClient = new SpendApiClient();
+  private final SpendDbClient spendDbClient = new SpendDbClient();
 
   @Override
   public void beforeEach(ExtensionContext context) throws Exception {
     AnnotationSupport.findAnnotation(context.getRequiredTestMethod(), User.class)
         .ifPresent(userAnno -> {
-              if (ArrayUtils.isNotEmpty(userAnno.spendings())) {
-                Spending spendAnno = userAnno.spendings()[0];
+              if (ArrayUtils.isNotEmpty(userAnno.spending())) {
+                Spending spendAnno = userAnno.spending()[0];
                 SpendJson spendJson = new SpendJson(
                     null,
                     new Date(),
@@ -45,7 +46,7 @@ public class SpendingExtension implements BeforeEachCallback, ParameterResolver 
                 );
                 context.getStore(NAMESPACE).put(
                     context.getUniqueId(),
-                    spendApiClient.addSpend(spendJson)
+                    spendDbClient.createSpend(spendJson)
                 );
               }
             }

@@ -15,5 +15,5 @@ import java.lang.annotation.Target;
 public @interface User {
   String username();
   Category[] categories() default {};
-  Spending[] spendings() default {};
+  Spending[] spending() default {};
 }

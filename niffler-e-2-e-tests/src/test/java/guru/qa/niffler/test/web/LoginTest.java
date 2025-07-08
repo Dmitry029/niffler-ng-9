@@ -16,7 +16,7 @@ public class LoginTest {
   @Test
   void mainPageShouldBeDisplayedAfterSuccessLogin() {
     Selenide.open(CFG.frontUrl(), LoginPage.class)
-        .successLogin("duck", "12345")
+        .successLogin("testUser3", "34567")
         .checkThatPageLoaded();
   }
 
@@ -24,6 +24,6 @@ public class LoginTest {
   void userShouldStayOnLoginPageAfterLoginWithBadCredentials() {
     LoginPage loginPage = Selenide.open(CFG.frontUrl(), LoginPage.class);
     loginPage.fillLoginPage(randomUsername(), "BAD");
-    loginPage.checkError("Bad credentials");
+    loginPage.checkError("Неверные учетные данные пользователя");
   }
 }

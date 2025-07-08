@@ -29,4 +29,6 @@ public interface Config {
   String registerPageUrl();
 
   String profilePageUrl();
+
+  String friendsPageUrl();
 }

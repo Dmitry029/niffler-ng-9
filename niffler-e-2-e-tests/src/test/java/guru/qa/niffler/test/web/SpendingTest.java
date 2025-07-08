@@ -16,10 +16,10 @@ public class SpendingTest {
 
   @User(
       username = "duck",
-      spendings = @Spending(
+      spending = @Spending(
           amount = 89990.00,
           description = "Advanced 9 поток!",
-          category = "Обучение"
+          category = "ОбучениеQA"
       )
   )
   @Test

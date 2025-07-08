@@ -5,6 +5,7 @@ import guru.qa.niffler.data.dao.impl.CategoryDaoJdbc;
 import guru.qa.niffler.data.dao.impl.SpendDaoJdbc;
 import guru.qa.niffler.data.entity.spend.CategoryEntity;
 import guru.qa.niffler.data.entity.spend.SpendEntity;
+import guru.qa.niffler.model.CategoryJson;
 import guru.qa.niffler.model.SpendJson;
 
 import static guru.qa.niffler.data.Databases.transaction;
@@ -27,5 +28,15 @@ public class SpendDbClient {
         },
         CFG.spendJdbcUrl()
     );
+  }
+
+  public CategoryJson createCategory(CategoryJson categoryJson){
+    CategoryEntity categoryEntity = CategoryEntity.fromJson(categoryJson);
+    return CategoryJson.fromEntity(categoryDao.create(categoryEntity));
+  }
+
+  public void deleteCategory(CategoryJson categoryJson){
+    CategoryEntity categoryEntity = CategoryEntity.fromJson(categoryJson);
+    categoryDao.deleteCategory(categoryEntity);
   }
 }

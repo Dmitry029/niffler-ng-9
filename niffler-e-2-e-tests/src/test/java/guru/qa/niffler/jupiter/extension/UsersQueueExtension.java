@@ -39,10 +39,14 @@ public class UsersQueueExtension implements
   private static final Queue<StaticUser> WITH_OUTCOME_REQUEST_USERS = new ConcurrentLinkedQueue<>();
 
   static {
-    EMPTY_USERS.add(new StaticUser("bee", "12345", null, null, null));
-    WITH_FRIEND_USERS.add(new StaticUser("duck", "12345", "dima", null, null));
-    WITH_INCOME_REQUEST_USERS.add(new StaticUser("dima", "12345", null, "bee", null));
-    WITH_OUTCOME_REQUEST_USERS.add(new StaticUser("barsik", "12345", null, null, "bill"));
+    EMPTY_USERS.add(new StaticUser(
+            "testUser1", "12345", null, null, null));
+    WITH_FRIEND_USERS.add(new StaticUser(
+            "testUser4", "45678", "testUser2", null, null));
+    WITH_INCOME_REQUEST_USERS.add(new StaticUser(
+            "testUser3", "34567", null, "testUser2", null));
+    WITH_OUTCOME_REQUEST_USERS.add(new StaticUser(
+            "testUser2", "23456", null, null, "testUser3"));
   }
 
   @Target(ElementType.PARAMETER)
