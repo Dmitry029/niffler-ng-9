@@ -13,31 +13,31 @@ import java.util.UUID;
 
 public class AuthAuthorityDaoSpringJdbc implements AuthAuthorityDao {
 
-    private final DataSource dataSource;
+  private final DataSource dataSource;
 
-    public AuthAuthorityDaoSpringJdbc(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
+  public AuthAuthorityDaoSpringJdbc(DataSource dataSource) {
+    this.dataSource = dataSource;
+  }
 
-    @Override
-    public void createAuthority(AuthAuthorityEntity... authority) {
-        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+  @Override
+  public void create(AuthAuthorityEntity... authority) {
+    JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+    jdbcTemplate.batchUpdate(
+        "INSERT INTO authority (user_id, authority) VALUES (? , ?)",
+        new BatchPreparedStatementSetter() {
+          @Override
+          public void setValues(PreparedStatement ps, int i) throws SQLException {
+            ps.setObject(1, authority[i].getUserId());
+            ps.setString(2, authority[i].getAuthority().name());
+          }
 
-        jdbcTemplate.batchUpdate(
-                "INSERT INTO authority(user_id, authority) VALUES (?, ?)",
-                new BatchPreparedStatementSetter() {
-                    @Override
-                    public void setValues(PreparedStatement ps, int i) throws SQLException {
-                        ps.setObject(1, authority[i].getUserId());
-                        ps.setString(2, authority[i].getAuthority().name());
-                    }
-                    @Override
-                    public int getBatchSize() {
-                        return authority.length;
-                    }
-                });
-    }
-
+          @Override
+          public int getBatchSize() {
+            return authority.length;
+          }
+        }
+    );
+  }
     @Override
     public List<AuthAuthorityEntity> findAll() {
         return List.of();
@@ -48,3 +48,4 @@ public class AuthAuthorityDaoSpringJdbc implements AuthAuthorityDao {
         return List.of();
     }
 }
+
