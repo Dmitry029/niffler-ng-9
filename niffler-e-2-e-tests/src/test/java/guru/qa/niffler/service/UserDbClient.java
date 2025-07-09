@@ -2,12 +2,7 @@ package guru.qa.niffler.service;
 
 import guru.qa.niffler.config.Config;
 import guru.qa.niffler.data.Databases.XaFunction;
-import guru.qa.niffler.data.dao.impl.AuthAuthorityDaoJdbc;
-import guru.qa.niffler.data.dao.impl.AuthAuthorityDaoSpringJdbc;
-import guru.qa.niffler.data.dao.impl.AuthUserDaoJdbc;
-import guru.qa.niffler.data.dao.impl.AuthUserDaoSpringJdbc;
-import guru.qa.niffler.data.dao.impl.UdUserDaoJdbc;
-import guru.qa.niffler.data.dao.impl.UdUserDaoSpringJdbc;
+import guru.qa.niffler.data.dao.impl.*;
 import guru.qa.niffler.data.entity.auth.AuthUserEntity;
 import guru.qa.niffler.data.entity.auth.Authority;
 import guru.qa.niffler.data.entity.auth.AuthorityEntity;
@@ -51,7 +46,7 @@ public class UserDbClient {
                 .create(authorityEntities);
 
         return UserJson.fromEntity(
-                new UserdataUserDaoSpringJdbc(dataSource(CFG.userdataJdbcUrl()))
+                new UdUserDaoSpringJdbc(dataSource(CFG.userdataJdbcUrl()))
                         .create(
                                 UserEntity.fromJson(user)
                         ),

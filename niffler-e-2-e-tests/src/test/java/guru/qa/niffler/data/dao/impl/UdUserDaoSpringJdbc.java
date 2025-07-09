@@ -1,8 +1,7 @@
 package guru.qa.niffler.data.dao.impl;
 
-import guru.qa.niffler.data.dao.UserdataUserDAO;
+import guru.qa.niffler.data.dao.UserdataUserDao;
 import guru.qa.niffler.data.entity.userdata.UserEntity;
-import guru.qa.niffler.data.mapper.AuthUserEntityRowMapper;
 import guru.qa.niffler.data.mapper.UdUserEntityRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -14,7 +13,7 @@ import java.sql.Statement;
 import java.util.Optional;
 import java.util.UUID;
 
-public class UdUserDaoSpringJdbc implements UserdataUserDAO {
+public class UdUserDaoSpringJdbc implements UserdataUserDao {
 
     private final DataSource dataSource;
 
@@ -23,7 +22,7 @@ public class UdUserDaoSpringJdbc implements UserdataUserDAO {
     }
 
     @Override
-    public UserEntity createUser(UserEntity user) {
+    public UserEntity create(UserEntity user) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         KeyHolder kh = new GeneratedKeyHolder();
         jdbcTemplate.update(con -> {
@@ -57,15 +56,5 @@ public class UdUserDaoSpringJdbc implements UserdataUserDAO {
                         id
                 )
         );
-    }
-
-    @Override
-    public Optional<UserEntity> findByUsername(String username) {
-        return Optional.empty();
-    }
-
-    @Override
-    public void delete(UserEntity user) {
-
     }
 }

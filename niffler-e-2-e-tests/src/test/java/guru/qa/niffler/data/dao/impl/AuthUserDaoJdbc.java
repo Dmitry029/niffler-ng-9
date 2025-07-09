@@ -9,8 +9,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -55,6 +53,7 @@ public class AuthUserDaoJdbc implements AuthUserDao {
     }
   }
 
+
   @Override
   public Optional<AuthUserEntity> findById(UUID id) {
     try (PreparedStatement ps = connection.prepareStatement("SELECT * FROM \"user\" WHERE id = ?")) {
@@ -80,5 +79,15 @@ public class AuthUserDaoJdbc implements AuthUserDao {
     } catch (SQLException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  @Override
+  public Optional<AuthUserEntity> findByUsername(String username) {
+    return Optional.empty();
+  }
+
+  @Override
+  public List<AuthUserEntity> findAll() {
+    return List.of();
   }
 }

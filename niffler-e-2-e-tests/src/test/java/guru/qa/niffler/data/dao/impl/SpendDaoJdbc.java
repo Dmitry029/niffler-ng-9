@@ -14,8 +14,6 @@ import java.util.UUID;
 
 public class SpendDaoJdbc implements SpendDao {
 
-  private static final Config CFG = Config.getInstance();
-
   private final Connection connection;
 
   public SpendDaoJdbc(Connection connection) {

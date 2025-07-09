@@ -1,7 +1,6 @@
 package guru.qa.niffler.data.dao.impl;
 
-import guru.qa.niffler.config.Config;
-import guru.qa.niffler.data.dao.UserdataUserDAO;
+import guru.qa.niffler.data.dao.UserdataUserDao;
 import guru.qa.niffler.data.entity.userdata.UserEntity;
 import guru.qa.niffler.model.CurrencyValues;
 
@@ -9,9 +8,7 @@ import java.sql.*;
 import java.util.Optional;
 import java.util.UUID;
 
-public class UdUserDaoJdbc implements UserdataUserDAO {
-
-    private static final Config CFG = Config.getInstance();
+public class UdUserDaoJdbc implements UserdataUserDao {
 
     private final Connection connection;
 
@@ -20,7 +17,7 @@ public class UdUserDaoJdbc implements UserdataUserDAO {
     }
 
     @Override
-    public UserEntity createUser(UserEntity user) {
+    public UserEntity create(UserEntity user) {
             try (PreparedStatement ps = connection.prepareStatement(
                     "INSERT INTO user (username, currency, firstname, surname, photo, photo_small, full_name)" +
                             " VALUES (?, ?, ?, ?, ?, ?, ?)",
@@ -41,7 +38,6 @@ public class UdUserDaoJdbc implements UserdataUserDAO {
                 try (ResultSet rs = ps.getGeneratedKeys()) {
                     if (rs.next()) {
                         generateKey = rs.getObject("id", UUID.class);
-
                     } else {
                         throw new SQLException("Can not find id in ResultSet");
                     }
@@ -82,7 +78,7 @@ public class UdUserDaoJdbc implements UserdataUserDAO {
             }
     }
 
-    @Override
+   /* @Override
     public Optional<UserEntity> findByUsername(String username) {
             try (PreparedStatement ps = connection.prepareStatement(
                     "SELECT * FROM user WHERE username = ?"
@@ -122,5 +118,5 @@ public class UdUserDaoJdbc implements UserdataUserDAO {
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
-    }
+    }*/
 }
