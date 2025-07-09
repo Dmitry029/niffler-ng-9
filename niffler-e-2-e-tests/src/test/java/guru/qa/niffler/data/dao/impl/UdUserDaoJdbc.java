@@ -9,13 +9,13 @@ import java.sql.*;
 import java.util.Optional;
 import java.util.UUID;
 
-public class UserdataUserDaoJdbc implements UserdataUserDAO {
+public class UdUserDaoJdbc implements UserdataUserDAO {
 
     private static final Config CFG = Config.getInstance();
 
     private final Connection connection;
 
-    public UserdataUserDaoJdbc(Connection connection) {
+    public UdUserDaoJdbc(Connection connection) {
         this.connection = connection;
     }
 

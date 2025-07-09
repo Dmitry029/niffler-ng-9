@@ -12,5 +12,5 @@ public class AuthAuthorityEntity {
 
     private Authority authority;
 
-    private AuthUserEntity  user;
+    private UUID userId;
 }
