@@ -15,6 +15,7 @@ public class SpendDbClient {
     private static final Config CFG = Config.getInstance();
 
     public SpendJson createSpend(SpendJson spend) {
+
         return transaction(connection -> {
                     SpendEntity spendEntity = SpendEntity.fromJson(spend);
                     if (spendEntity.getCategory().getId() == null) {
@@ -22,10 +23,11 @@ public class SpendDbClient {
                                 .create(spendEntity.getCategory());
                         spendEntity.setCategory(categoryEntity);
                     }
-                    return SpendJson.fromEntity(new SpendDaoJdbc(connection).create(spendEntity)
+                    return SpendJson.fromEntity(
+                            new SpendDaoJdbc(connection).create(spendEntity)
                     );
                 },
-                CFG.spendJdbcUrl(), 2
+                CFG.spendJdbcUrl(), IsolationLevel.READ_COMMITTED.value
         );
     }
 
@@ -35,17 +37,17 @@ public class SpendDbClient {
                     CategoryEntity categoryEntity = CategoryEntity.fromJson(categoryJson);
                     return CategoryJson.fromEntity(new CategoryDaoJdbc(connection).create(categoryEntity));
                 },
-                CFG.spendJdbcUrl(), 2
+                CFG.spendJdbcUrl(), IsolationLevel.READ_COMMITTED.value
         );
     }
 
     public void deleteCategory(CategoryJson categoryJson) {
-        transaction(
-                connection -> {
+        transaction(connection -> {
                     CategoryEntity categoryEntity = CategoryEntity.fromJson(categoryJson);
                     new CategoryDaoJdbc(connection).deleteCategory(categoryEntity);
+                    return null;
                 },
-                CFG.spendJdbcUrl(), 2
+                CFG.spendJdbcUrl(), IsolationLevel.READ_COMMITTED.value
         );
     }
 }
