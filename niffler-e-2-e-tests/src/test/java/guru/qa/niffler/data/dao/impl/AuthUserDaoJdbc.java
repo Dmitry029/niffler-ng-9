@@ -2,6 +2,7 @@ package guru.qa.niffler.data.dao.impl;
 
 import guru.qa.niffler.data.dao.AuthUserDao;
 import guru.qa.niffler.data.entity.auth.AuthUserEntity;
+import guru.qa.niffler.data.mapper.AuthUserEntityRowMapper;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -9,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -53,33 +55,45 @@ public class AuthUserDaoJdbc implements AuthUserDao {
     }
   }
 
-
   @Override
   public Optional<AuthUserEntity> findById(UUID id) {
     try (PreparedStatement ps = connection.prepareStatement("SELECT * FROM \"user\" WHERE id = ?")) {
       ps.setObject(1, id);
 
-      ps.execute();
-
-      try (ResultSet rs = ps.getResultSet()) {
-        if (rs.next()) {
-          AuthUserEntity result = new AuthUserEntity();
-          result.setId(rs.getObject("id", UUID.class));
-          result.setUsername(rs.getString("username"));
-          result.setPassword(rs.getString("password"));
-          result.setEnabled(rs.getBoolean("enabled"));
-          result.setAccountNonExpired(rs.getBoolean("account_non_expired"));
-          result.setAccountNonLocked(rs.getBoolean("account_non_locked"));
-          result.setCredentialsNonExpired(rs.getBoolean("credentials_non_expired"));
-          return Optional.of(result);
-        } else {
-          return Optional.empty();
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                AuthUserEntity result = AuthUserEntityRowMapper.instance.mapRow(rs, 1);
+                return Optional.of(result);
+            } else {
+                return Optional.empty();
+            }
         }
-      }
     } catch (SQLException e) {
-      throw new RuntimeException(e);
+        throw new RuntimeException(e);
     }
   }
+
+    @Override
+    public List<AuthUserEntity> findAll() {
+        try (PreparedStatement ps = connection.prepareStatement(
+                "SELECT * FROM \"user\""
+        )) {
+            ps.execute();
+
+            List<AuthUserEntity> result = new ArrayList<>();
+            try (ResultSet rs = ps.getResultSet()) {
+                int rowNum = 0;
+                while (rs.next()) {
+                    result.add(
+                            AuthUserEntityRowMapper.instance.mapRow(rs, rowNum++)
+                    );
+                }
+            }
+            return result;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @Override
     public Optional<AuthUserEntity> findByUsername(String username) {
@@ -92,8 +106,8 @@ public class AuthUserDaoJdbc implements AuthUserDao {
 
             try (ResultSet rs = ps.getResultSet()) {
                 if (rs.next()) {
-                    return Optional.of(
-                            mapperAuthUserEntity(rs)
+                    return Optional.ofNullable(
+                            AuthUserEntityRowMapper.instance.mapRow(rs, 0)  // Используем mapRow с номером строки 0
                     );
                 } else {
                     return Optional.empty();
@@ -102,38 +116,5 @@ public class AuthUserDaoJdbc implements AuthUserDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    @Override
-    public List<AuthUserEntity> findAll() {
-        try (PreparedStatement ps = connection.prepareStatement(
-                "SELECT * FROM \"user\""
-        )) {
-            ps.execute();
-
-            List<AuthUserEntity> result = new ArrayList<>();
-            try (ResultSet rs = ps.getResultSet()) {
-                while (rs.next()) {
-                    result.add(
-                            mapperAuthUserEntity(rs)
-                    );
-                }
-            }
-            return result;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private AuthUserEntity mapperAuthUserEntity(ResultSet rs) throws SQLException {
-        AuthUserEntity result = new AuthUserEntity();
-        result.setId(rs.getObject("id", UUID.class));
-        result.setUsername(rs.getString("username"));
-        result.setPassword(rs.getString("password"));
-        result.setEnabled(rs.getBoolean("enabled"));
-        result.setAccountNonExpired(rs.getBoolean("account_non_expired"));
-        result.setAccountNonLocked(rs.getBoolean("account_non_locked"));
-        result.setCredentialsNonExpired(rs.getBoolean("credentials_non_expired"));
-        return result;
     }
 }
