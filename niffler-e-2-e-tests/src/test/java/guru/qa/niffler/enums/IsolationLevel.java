@@ -1,4 +1,4 @@
-package guru.qa.niffler.service;
+package guru.qa.niffler.enums;
 
 import lombok.AllArgsConstructor;
 
@@ -9,5 +9,5 @@ public enum IsolationLevel {
     REPEATABLE_READ(3),
     SERIALIZABLE(4);
 
-    final int value;
+    public final int value;
 }

@@ -5,6 +5,7 @@ import guru.qa.niffler.data.dao.impl.CategoryDaoJdbc;
 import guru.qa.niffler.data.dao.impl.SpendDaoJdbc;
 import guru.qa.niffler.data.entity.spend.CategoryEntity;
 import guru.qa.niffler.data.entity.spend.SpendEntity;
+import guru.qa.niffler.enums.IsolationLevel;
 import guru.qa.niffler.model.CategoryJson;
 import guru.qa.niffler.model.SpendJson;
 
@@ -27,7 +28,7 @@ public class SpendDbClient {
                             new SpendDaoJdbc(connection).create(spendEntity)
                     );
                 },
-                CFG.spendJdbcUrl(), IsolationLevel.READ_COMMITTED.value
+                CFG.spendJdbcUrl(), IsolationLevel.READ_COMMITTED
         );
     }
 
@@ -37,7 +38,7 @@ public class SpendDbClient {
                     CategoryEntity categoryEntity = CategoryEntity.fromJson(categoryJson);
                     return CategoryJson.fromEntity(new CategoryDaoJdbc(connection).create(categoryEntity));
                 },
-                CFG.spendJdbcUrl(), IsolationLevel.READ_COMMITTED.value
+                CFG.spendJdbcUrl(), IsolationLevel.READ_COMMITTED
         );
     }
 
@@ -47,7 +48,7 @@ public class SpendDbClient {
                     new CategoryDaoJdbc(connection).deleteCategory(categoryEntity);
                     return null;
                 },
-                CFG.spendJdbcUrl(), IsolationLevel.READ_COMMITTED.value
+                CFG.spendJdbcUrl(), IsolationLevel.READ_COMMITTED
         );
     }
 }

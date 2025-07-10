@@ -54,7 +54,6 @@ public class UsersDbClient {
     );
   }
 
-
   public UserJson createUser(UserJson user) {
     return UserJson.fromEntity(
         xaTransaction(
