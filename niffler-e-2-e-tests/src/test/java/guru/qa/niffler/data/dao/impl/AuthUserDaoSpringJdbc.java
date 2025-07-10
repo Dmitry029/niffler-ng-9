@@ -60,11 +60,22 @@ public class AuthUserDaoSpringJdbc implements AuthUserDao {
 
     @Override
     public Optional<AuthUserEntity> findByUsername(String username) {
-        return Optional.empty();
+      JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+      return Optional.ofNullable(
+              jdbcTemplate.queryForObject(
+                      "SELECT * FROM \"user\" WHERE username = ?",
+                      AuthUserEntityRowMapper.instance,
+                      username
+              )
+      );
     }
 
     @Override
     public List<AuthUserEntity> findAll() {
-        return List.of();
+      JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+      return jdbcTemplate.query(
+              "SELECT * FROM \"user\"",
+              AuthUserEntityRowMapper.instance
+      );
     }
 }

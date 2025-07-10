@@ -2,9 +2,11 @@ package guru.qa.niffler.data.dao.impl;
 
 import guru.qa.niffler.data.dao.UserdataUserDao;
 import guru.qa.niffler.data.entity.userdata.UserEntity;
-import guru.qa.niffler.model.CurrencyValues;
+import guru.qa.niffler.data.mapper.UdUserEntityRowMapper;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -55,49 +57,10 @@ public class UdUserDaoJdbc implements UserdataUserDao {
                     "SELECT * FROM user WHERE id = ?"
             )) {
                 ps.setObject(1, id);
-                ps.execute();
-
-                try (ResultSet rs = ps.getResultSet()) {
+                try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
-                        UserEntity ue = new UserEntity();
-                        ue.setId(rs.getObject("id", UUID.class));
-                        ue.setUsername(rs.getString("username"));
-                        ue.setCurrency(CurrencyValues.valueOf(rs.getString("currency")));
-                        ue.setFirstname(rs.getString("firstname"));
-                        ue.setSurname(rs.getString("surname"));
-                        ue.setPhoto(rs.getBytes("photo"));
-                        ue.setPhotoSmall(rs.getBytes("photo_small"));
-                        ue.setFullname(rs.getString("full_name"));
-                        return Optional.of(ue);
-                    } else {
-                        return Optional.empty();
-                    }
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-    }
-
-   /* @Override
-    public Optional<UserEntity> findByUsername(String username) {
-            try (PreparedStatement ps = connection.prepareStatement(
-                    "SELECT * FROM user WHERE username = ?"
-            )) {
-                ps.setString(1, username);
-                ps.execute();
-
-                try (ResultSet rs = ps.getResultSet()) {
-                    if (rs.next()) {
-                        UserEntity ue = new UserEntity();
-                        ue.setId(rs.getObject("id", UUID.class));
-                        ue.setUsername(rs.getString("username"));
-                        ue.setCurrency(CurrencyValues.valueOf(rs.getString("currency")));
-                        ue.setFirstname(rs.getString("firstname"));
-                        ue.setSurname(rs.getString("surname"));
-                        ue.setPhoto(rs.getBytes("photo"));
-                        ue.setPhotoSmall(rs.getBytes("photo_small"));
-                        ue.setFullname(rs.getString("full_name"));
-                        return Optional.of(ue);
+                        UserEntity userEntity = UdUserEntityRowMapper.instance.mapRow(rs, 1);
+                        return Optional.of(userEntity);
                     } else {
                         return Optional.empty();
                     }
@@ -108,15 +71,24 @@ public class UdUserDaoJdbc implements UserdataUserDao {
     }
 
     @Override
-    public void delete(UserEntity user) {
-            try (PreparedStatement ps = connection.prepareStatement(
-                    "DELETE FROM user WHERE id = ?"
-            )) {
-                ps.setObject(1, user.getId());
-                ps.execute();
+    public List<UserEntity> findAll() {
+        try (PreparedStatement ps = connection.prepareStatement(
+                "SELECT * FROM \"user\""
+        )) {
+            ps.execute();
+            try (ResultSet rs = ps.getResultSet()) {
 
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
+                List<UserEntity> userEntityList = new ArrayList<>();
+                int rowNum = 0;
+                UdUserEntityRowMapper mapper = UdUserEntityRowMapper.instance;
+
+                while (rs.next()) {
+                    userEntityList.add(mapper.mapRow(rs, rowNum++));
+                }
+                return userEntityList;
             }
-    }*/
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
