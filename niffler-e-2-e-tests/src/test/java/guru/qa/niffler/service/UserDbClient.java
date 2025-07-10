@@ -87,7 +87,7 @@ public class UserDbClient {
                                     ue.setUsername(user.username());
                                     ue.setFullname(user.fullname());
                                     ue.setCurrency(user.currency());
-                                    new UserdataUserDaoJdbc(con).create(ue);
+                                    new UdUserDaoJdbc(con).create(ue);
                                     return ue;
                                 },
                                 CFG.userdataJdbcUrl()
