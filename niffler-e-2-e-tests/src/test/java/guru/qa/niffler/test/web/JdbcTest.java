@@ -11,51 +11,9 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Date;
 
-@Disabled
+//@Disabled
 public class JdbcTest {
 
-  @Test
-  void txTest() {
-    SpendDbClient spendDbClient = new SpendDbClient();
-
-    SpendJson spend = spendDbClient.createSpend(
-        new SpendJson(
-            null,
-            new Date(),
-            new CategoryJson(
-                null,
-                "cat-name-tx-2",
-                "duck",
-                false
-            ),
-            CurrencyValues.RUB,
-            1000.0,
-            "spend-name-tx",
-            null
-        )
-    );
-
-    System.out.println(spend);
-  }
-
-  @Test
-  void xaTxTest() {
-    UsersDbClient usersDbClient = new UsersDbClient();
-    UserJson user = usersDbClient.createUser(
-        new UserJson(
-            null,
-            "valentin-4",
-            null,
-            null,
-            null,
-            CurrencyValues.RUB,
-            null,
-            null,
-            null
-        )
-    );
-    System.out.println(user);
-  }
 
   @Test
   void springJdbcTest() {
@@ -63,7 +21,7 @@ public class JdbcTest {
     UserJson user = usersDbClient.createUserSpringJdbc(
         new UserJson(
             null,
-            "valentin-5",
+            "valentin-101",
             null,
             null,
             null,

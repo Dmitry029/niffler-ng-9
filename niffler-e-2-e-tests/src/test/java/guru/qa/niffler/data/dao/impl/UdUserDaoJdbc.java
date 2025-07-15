@@ -1,26 +1,28 @@
 package guru.qa.niffler.data.dao.impl;
 
-import guru.qa.niffler.data.dao.UserdataUserDao;
+import guru.qa.niffler.config.Config;
+import guru.qa.niffler.data.dao.UdUserDao;
 import guru.qa.niffler.data.entity.userdata.UserEntity;
 import guru.qa.niffler.data.mapper.UdUserEntityRowMapper;
 
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public class UdUserDaoJdbc implements UserdataUserDao {
+import static guru.qa.niffler.data.tpl.Connections.holder;
 
-    private final Connection connection;
+public class UdUserDaoJdbc implements UdUserDao {
 
-    public UdUserDaoJdbc(Connection connection) {
-        this.connection = connection;
-    }
+    private static final Config CFG = Config.getInstance();
 
     @Override
     public UserEntity create(UserEntity user) {
-            try (PreparedStatement ps = connection.prepareStatement(
+            try (PreparedStatement ps = holder(CFG.userdataJdbcUrl()).connection().prepareStatement(
                     "INSERT INTO user (username, currency, firstname, surname, photo, photo_small, full_name)" +
                             " VALUES (?, ?, ?, ?, ?, ?, ?)",
                     Statement.RETURN_GENERATED_KEYS
@@ -53,7 +55,7 @@ public class UdUserDaoJdbc implements UserdataUserDao {
 
     @Override
     public Optional<UserEntity> findById(UUID id) {
-            try (PreparedStatement ps = connection.prepareStatement(
+            try (PreparedStatement ps = holder(CFG.userdataJdbcUrl()).connection().prepareStatement(
                     "SELECT * FROM user WHERE id = ?"
             )) {
                 ps.setObject(1, id);
@@ -72,7 +74,7 @@ public class UdUserDaoJdbc implements UserdataUserDao {
 
     @Override
     public List<UserEntity> findAll() {
-        try (PreparedStatement ps = connection.prepareStatement(
+        try (PreparedStatement ps = holder(CFG.userdataJdbcUrl()).connection().prepareStatement(
                 "SELECT * FROM \"user\""
         )) {
             ps.execute();
