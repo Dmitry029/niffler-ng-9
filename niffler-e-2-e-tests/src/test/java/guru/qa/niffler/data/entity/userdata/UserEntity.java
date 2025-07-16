@@ -1,5 +1,6 @@
 package guru.qa.niffler.data.entity.userdata;
 
+import guru.qa.niffler.model.UserJson;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -46,6 +47,14 @@ public class UserEntity implements Serializable {
 
   @OneToMany(mappedBy = "addressee", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
   private List<FriendshipEntity> friendshipAddressees = new ArrayList<>();
+
+  public static UserEntity fromJson(UserJson json) {
+    UserEntity ue = new UserEntity();
+    ue.setId(json.id());
+    ue.setUsername(null);
+    ue.setCurrency(json.currency());
+
+  }
 
   public void addFriends(FriendshipStatus status, UserEntity... friends) {
     List<FriendshipEntity> friendsEntities = Stream.of(friends)
