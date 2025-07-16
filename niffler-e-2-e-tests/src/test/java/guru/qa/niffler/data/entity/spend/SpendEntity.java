@@ -1,12 +1,16 @@
 package guru.qa.niffler.data.entity.spend;
 
+import guru.qa.niffler.data.entity.userdata.UserEntity;
 import guru.qa.niffler.model.CurrencyValues;
+import guru.qa.niffler.model.SpendJson;
+import guru.qa.niffler.model.UserJson;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
@@ -42,6 +46,18 @@ public class SpendEntity implements Serializable {
   @ManyToOne(fetch = FetchType.EAGER, cascade = PERSIST)
   @JoinColumn(name = "category_id", referencedColumnName = "id")
   private CategoryEntity category;
+
+  public static SpendEntity fromJson(SpendJson json) {
+    SpendEntity spendEntity = new SpendEntity();
+    spendEntity.setId(json.id());
+    spendEntity.setUsername(json.username());
+    spendEntity.setCurrency(json.currency());
+    spendEntity.setSpendDate(new java.sql.Date(json.spendDate().getTime()));
+    spendEntity.setAmount(json.amount());
+    spendEntity.setDescription(json.description());
+    spendEntity.setCategory(CategoryEntity.fromJson(json.category()));
+    return spendEntity;
+  }
 
   @Override
   public final boolean equals(Object o) {

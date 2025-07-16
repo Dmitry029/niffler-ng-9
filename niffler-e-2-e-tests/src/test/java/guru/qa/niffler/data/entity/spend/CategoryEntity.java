@@ -1,5 +1,6 @@
 package guru.qa.niffler.data.entity.spend;
 
+import guru.qa.niffler.model.CategoryJson;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -42,5 +43,14 @@ public class CategoryEntity implements Serializable {
   @Override
   public final int hashCode() {
     return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
+  }
+
+  public static CategoryEntity fromJson(CategoryJson json) {
+    CategoryEntity categoryEntity = new CategoryEntity();
+    categoryEntity.setId(json.id());
+    categoryEntity.setName(json.name());
+    categoryEntity.setUsername(json.username());
+    categoryEntity.setArchived(json.archived());
+    return categoryEntity;
   }
 }

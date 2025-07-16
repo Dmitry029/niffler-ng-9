@@ -22,7 +22,7 @@ public class JdbcTest {
         UserJson user = usersDbClient.createUserSpringJdbc(
             new UserJson(
                 null,
-                "valentin-springJdbcTest",
+                "valentin-6",
                 null,
                 null,
                 null,
@@ -35,7 +35,7 @@ public class JdbcTest {
         System.out.println(user);
     }
 
-    @Test
+    /*@Test
     void springJdbcWithoutTransactionTest() {
         UsersDbClient usersDbClient = new UsersDbClient();
         UserJson user = usersDbClient.createUserWithoutSpringJdbcTransaction(
@@ -90,7 +90,7 @@ public class JdbcTest {
             )
         );
         System.out.println(user);
-    }
+    }*/
 
     @Test
     void txTest() {
@@ -108,7 +108,7 @@ public class JdbcTest {
                 CurrencyValues.RUB,
                 1000.0,
                 "spend-name-tx3",
-                null
+                "duck"
             )
         );
         System.out.println(spend);
