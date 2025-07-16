@@ -65,7 +65,7 @@ public class UsersDbClient {
             AuthorityEntity[] authorityEntities = Arrays.stream(Authority.values()).map(
                     e -> {
                         AuthorityEntity ae = new AuthorityEntity();
-                        ae.setUserId(createdAuthUser.getId());
+                        ae.setUser(createdAuthUser);
                         ae.setAuthority(e);
                         return ae;
                     }

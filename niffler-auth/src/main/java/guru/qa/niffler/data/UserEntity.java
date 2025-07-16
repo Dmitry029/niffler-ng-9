@@ -1,5 +1,6 @@
 package guru.qa.niffler.data;
 
+import guru.qa.niffler.model.UserJson;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -61,6 +62,19 @@ public class UserEntity implements Serializable {
   public void removeAuthority(AuthorityEntity authority) {
     this.authorities.remove(authority);
     authority.setUser(null);
+  }
+
+  public static UserEntity fromJson(UserJson json) {
+    UserEntity ue = new UserEntity();
+    ue.setId(json.id());
+    ue.setUsername(json.username());
+    ue.setCurrency(json.currency());
+    ue.setFirstname(json.firstname());
+    ue.setSurname(json.surname());
+    ue.setFullname(json.fullname());
+    ue.setPhoto(json.photo() != null ? json.photo().getBytes(StandardCharsets.UTF_8) : null);
+    ue.setPhotoSmall(json.photoSmall() != null ? json.photoSmall().getBytes(StandardCharsets.UTF_8) : null);
+    return ue;
   }
 
   @Override

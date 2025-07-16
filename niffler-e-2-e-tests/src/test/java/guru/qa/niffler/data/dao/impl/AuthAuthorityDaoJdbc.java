@@ -25,7 +25,7 @@ public class AuthAuthorityDaoJdbc implements AuthAuthorityDao {
                 "INSERT INTO \"authority\" (user_id, authority) VALUES (?, ?)",
                 PreparedStatement.RETURN_GENERATED_KEYS)) {
             for (AuthorityEntity a : authority) {
-                ps.setObject(1, a.getUserId());
+                ps.setObject(1, a.getUser().getId());
                 ps.setString(2, a.getAuthority().name());
                 ps.addBatch();
                 ps.clearParameters();
@@ -55,10 +55,23 @@ public class AuthAuthorityDaoJdbc implements AuthAuthorityDao {
 
     private AuthorityEntity mapperAuthorityEntity(ResultSet rs) throws SQLException {
         AuthorityEntity ae = new AuthorityEntity();
+
+        // Установка ID для AuthorityEntity
         ae.setId(rs.getObject("id", UUID.class));
 
-        ae.setUserId(new AuthUserEntity(rs.getObject("id", UUID.class)).getId());
-        ae.setAuthority(Authority.valueOf(rs.getString("authority")));
+        // Создание AuthUserEntity и установка его ID
+        AuthUserEntity user = new AuthUserEntity();
+        user.setId(rs.getObject("user_id", UUID.class));
+
+        // Установить пользователя для AuthorityEntity
+        ae.setUser(user);
+
+        // Установка значения authority
+        String authorityString = rs.getString("authority");
+        if (authorityString != null) {
+            ae.setAuthority(Authority.valueOf(authorityString));
+        }
+
         return ae;
     }
 }
